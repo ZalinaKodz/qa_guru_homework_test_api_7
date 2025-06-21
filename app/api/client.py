@@ -1,5 +1,4 @@
-import os
-from typing import Optional, TypeVar, Type, Any
+from typing import Optional, TypeVar, Any
 import requests
 from requests import Session
 from fastapi import HTTPException

@@ -1,4 +1,3 @@
-
 from fastapi import APIRouter
 
 from app.database.engine import check_availability

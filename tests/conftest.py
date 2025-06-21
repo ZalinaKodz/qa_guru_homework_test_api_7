@@ -1,15 +1,30 @@
-import os
-
 import pytest
+import os
 from dotenv import load_dotenv
 
-@pytest.fixture(scope="session", autouse=True)
-def load_env():
-    load_dotenv()
+load_dotenv()
 
-@pytest.fixture(scope="module")
-def app_url():
-    url = os.getenv("APP_URL")
-    if url is None:
-        raise ValueError("Переменная APP_URL не задана в .env файле")
-    return url
+def pytest_addoption(parser):
+    parser.addoption(
+        "--env",
+        default="dev",
+        help="Environment to run tests against: local or prod"
+    )
+
+@pytest.fixture(scope="session")
+def env(request):
+    return request.config.getoption("--env")
+
+@pytest.fixture(scope="session")
+def app_url(env):
+    if env == "dev":
+        return os.getenv("APP_URL", "http://127.0.0.1:8002")
+    elif env == "prod":
+        return os.getenv("APP_URL_PROD", "https://your-production-url.com")
+    else:
+        raise ValueError(f"Unknown environment: {env}")
+
+@pytest.fixture(scope="session")
+def api_client(app_url):
+    from app.api.users_client import UserApiClient
+    return UserApiClient(base_url=app_url)

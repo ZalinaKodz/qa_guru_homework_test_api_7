@@ -13,3 +13,4 @@ fastapi-pagination~=0.13.1
 uvicorn~=0.34.2
 voluptuous~=0.15.2
 pydantic-settings~=2.9.1
+curlify~=3.0.0
